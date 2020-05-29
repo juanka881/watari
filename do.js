@@ -9,6 +9,11 @@ if(!fs.existsSync('dist')) {
 
 const { task, sh } = require('./dist/src');
 
+function getOutputDir() {
+    const outDir = path.join('dist', 'src');
+    return outDir;
+}
+
 function clean() {
     shell.rm('-rf', './dist');
 }
@@ -69,10 +74,20 @@ function pack() {
     clean();
     build();
 
-    const outDir = path.join('dist', 'src');
-
+    const outDir = getOutputDir();
     shell.cp('-u', 'package.json', outDir);
+
     sh('npm pack', { cwd: outDir });
+}
+
+function pub() {
+    clean();
+    build();
+
+    const outDir = getOutputDir();
+    shell.cp('-u', 'package.json', outDir);
+
+    sh('npm publish', { cwd: outDir });
 }
 
 task({
@@ -84,5 +99,6 @@ task({
     test,
     cover,
     coverv,
-    pack
+    pack,
+    pub
 });
