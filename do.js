@@ -1,5 +1,6 @@
 const fs = require('fs');
 const shell = require('shelljs');
+const path = require('path');
 
 if(!fs.existsSync('dist')) {
     console.log('run `yarn build` first');
@@ -64,6 +65,16 @@ function coverv() {
     sh('start dist/.coverage/lcov-report/index.html');
 }
 
+function pack() {
+    clean();
+    build();
+
+    const outDir = path.join('dist', 'src');
+
+    shell.cp('-u', 'package.json', outDir);
+    sh('npm pack', { cwd: outDir });
+}
+
 task({
     default: build,
     clean,
@@ -72,5 +83,6 @@ task({
     build,
     test,
     cover,
-    coverv
+    coverv,
+    pack
 });

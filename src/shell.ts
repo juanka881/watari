@@ -23,5 +23,8 @@ export function sh(command: string | string[], options: ExecSyncOptions): void {
 		if (error.code === 130) {
 			process.exit(0);
 		}
+		else {
+			throw error;
+		}
 	}
 }
